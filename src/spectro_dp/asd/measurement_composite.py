@@ -40,6 +40,7 @@ class MeasurementComposite:
         :param kwargs: Optional - Possible options
             set_1_count: Number of first set measurements (Default: 10)
             set_2_count: Number of second set measurements (Default: 10)
+            debug: Print processing progress
         """
         self._input_dir = Path(input_dir)
         self._file_prefix = file_prefix
@@ -47,6 +48,8 @@ class MeasurementComposite:
         self._set_1_count = kwargs.get('set_1_count', self.SET_COUNT)
         self._set_2_index = set_2_index
         self._set_2_count = kwargs.get('set_2_count', self.SET_COUNT)
+
+        self._debug = kwargs.get('debug', False)
 
         self._set_1 = np.zeros(MeasurementFile.BAND_COUNT, dtype=np.float32)
         self._set_2 = np.zeros(MeasurementFile.BAND_COUNT, dtype=np.float32)
@@ -87,9 +90,12 @@ class MeasurementComposite:
 
         :return: Array with ratios per band
         """
+        self._print_progress("Processing set-1:\n  Averaging files:")
         self._set_1 = self._average_set(self._set_1_index, self._set_1_count)
+        self._print_progress("Processing set-2:\n  Averaging files:")
         self._set_2 = self._average_set(self._set_2_index, self._set_2_count)
 
+        self._print_progress("Calculating: set-1 / set-2")
         return self._adjust_detector_split(self._set_1 / self._set_2)
 
     def _file_glob(self, file_index) -> Iterable[Path]:
@@ -112,6 +118,7 @@ class MeasurementComposite:
 
         for file_number in range(start_index, start_index + file_count):
             for file in self._file_glob(file_number):
+                self._print_progress(f"  - {file.as_posix()}")
                 measurements += MeasurementFile(file).data
                 read_count += 1
 
@@ -124,6 +131,15 @@ class MeasurementComposite:
             )
 
         return measurements / read_count
+
+    def _print_progress(self, message) -> None:
+        """
+        Helper to print progress when debugging is enabled
+
+        :param message: message to print
+        """
+        if self._debug:
+            print(message)
 
     @staticmethod
     def _adjust_detector_split(measurement) -> np.ndarray:

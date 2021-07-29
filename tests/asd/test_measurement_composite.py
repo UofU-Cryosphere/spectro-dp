@@ -70,6 +70,13 @@ class TestMeasurementComposite:
         )
         assert 2 == subject._set_2_count
 
+    def test_debug_default_to_false(self, subject):
+        assert not subject._debug
+
+    def test_debug_enable(self):
+        subject = MeasurementComposite('', '', debug=True)
+        assert subject._debug
+
     # Properties
     def test_input_dir_property(self, subject):
         assert isinstance(subject.input_dir, Path)
