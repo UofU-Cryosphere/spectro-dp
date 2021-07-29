@@ -81,6 +81,9 @@ class TestMeasurementComposite:
     def test_input_dir_property(self, subject):
         assert isinstance(subject.input_dir, Path)
 
+    def test_results(self, subject):
+        assert subject.result is None
+
     def test_set_1(self, subject):
         assert isinstance(subject.set_1, np.ndarray)
         assert MeasurementFile.BAND_COUNT == subject.set_1.size
@@ -90,13 +93,13 @@ class TestMeasurementComposite:
         assert MeasurementFile.BAND_COUNT == subject.set_2.size
 
     # Methods
-    def test_calculate(self, subject):
-        results = subject.calculate()
+    def test_calculate_sets_results(self, subject):
+        subject.calculate()
         assert np.array_equal(
             subject._adjust_detector_split(subject.set_1 / subject.set_2),
-            results
+            subject.result
         )
-        assert pytest.approx(1.2915, abs=0.0001) == results[0]
+        assert pytest.approx(1.2915, abs=0.0001) == subject.result[0]
 
     def test_calculate_sets_first(self, subject):
         subject.calculate()

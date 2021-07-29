@@ -53,6 +53,7 @@ class MeasurementComposite:
 
         self._set_1 = np.zeros(MeasurementFile.BAND_COUNT, dtype=np.float32)
         self._set_2 = np.zeros(MeasurementFile.BAND_COUNT, dtype=np.float32)
+        self._result = None
 
     @property
     def input_dir(self) -> Path:
@@ -81,6 +82,15 @@ class MeasurementComposite:
         """
         return self._set_2
 
+    @property
+    def result(self) -> np.ndarray:
+        """
+        Result from the calculate() method.
+
+        :return: Array indexed by band
+        """
+        return self._result
+
     def calculate(self) -> np.array:
         """
         Calculate the ratio of set_1 versus set_2 measurement values.
@@ -96,7 +106,7 @@ class MeasurementComposite:
         self._set_2 = self._average_set(self._set_2_index, self._set_2_count)
 
         self._print_progress("Calculating: set-1 / set-2")
-        return self._adjust_detector_split(self._set_1 / self._set_2)
+        self._result = self._adjust_detector_split(self._set_1 / self._set_2)
 
     def _file_glob(self, file_index) -> Iterable[Path]:
         file_glob = self.FILE_GLOB.format(
