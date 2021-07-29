@@ -1,6 +1,7 @@
 import click
 
 from .measurement_composite import MeasurementComposite
+from .plotter import Plotter
 
 
 @click.command()
@@ -26,12 +27,26 @@ def cli(
         debug
 ):
     try:
-        result = MeasurementComposite(
+        composite = MeasurementComposite(
             input_dir, file_prefix, set_1_index, set_2_index,
             set_1_count=set_1_count, set_2_count=set_2_count,
             debug=debug
-        ).calculate()
+        )
+        composite.calculate()
 
-        print(result.mean())
+        if composite.set_2.mean() < composite.set_1.mean():
+            set_1_label = 'Incoming'
+            set_2_label = 'Outgoing'
+        else:
+            set_1_label = 'Outgoing'
+            set_2_label = 'Incoming'
+
+        Plotter.show(
+            composite,
+            composite_title='Albedo',
+            set_1_label=set_1_label,
+            set_2_label=set_2_label
+        )
+
     except FileNotFoundError as fnfe:
         print(f"ERROR: {fnfe}")
