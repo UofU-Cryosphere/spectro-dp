@@ -34,6 +34,8 @@ def cli(
         )
         composite.calculate()
 
+        print(f"Results saved to:\n  {composite.save('albedo')}")
+
         if composite.set_2.mean() < composite.set_1.mean():
             set_1_label = 'Incoming'
             set_2_label = 'Outgoing'
