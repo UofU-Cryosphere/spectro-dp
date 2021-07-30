@@ -91,6 +91,29 @@ class MeasurementComposite:
         """
         return self._result
 
+    def save(self, file_suffix) -> str:
+        """
+        Save the result as .txt file with the given suffix. The file will be
+        stored in the initialized input directory along with the input files.
+        Each entry will have four decimal point precision.
+
+        This method requires the results to be calculated first.
+
+        :param file_suffix: Name to use as a file name suffix
+        :return Full path of saved file
+        """
+        if self.result is not None:
+            outfile = self.input_dir.joinpath(
+                f"{self._file_prefix}_{file_suffix}.txt"
+            ).as_posix()
+            np.savetxt(outfile, self.result, fmt='%.4f')
+            return outfile
+        else:
+            print(
+                "ERROR: No results calculated. Did you run calculate() first?"
+            )
+            return ''
+
     def calculate(self) -> np.array:
         """
         Calculate the ratio of set_1 versus set_2 measurement values.

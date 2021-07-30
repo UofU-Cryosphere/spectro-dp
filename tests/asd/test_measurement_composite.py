@@ -17,6 +17,8 @@ def subject(test_data_path, file_prefix):
 
 
 class TestMeasurementComposite:
+    TEST_RESULT_FILE = 'pytest'
+
     # Constants
     def test_first_set_index(self):
         assert 0 == MeasurementComposite.FIRST_SET_INDEX
@@ -118,6 +120,23 @@ class TestMeasurementComposite:
         print(subject.set_2)
         assert pytest.approx(525.8092, abs=0.0001) == subject.set_2[0]
 
+    def test_save(self, subject):
+        subject.calculate()
+        outfile = Path(subject.save(self.TEST_RESULT_FILE))
+        assert outfile.exists()
+        assert pytest.approx(
+            np.loadtxt(outfile.as_posix())[0], abs=.0001
+        ) == subject.result[0]
+
+        outfile.unlink()
+
+    def test_save_no_results(self, subject):
+        assert '' == MeasurementComposite('','').save(self.TEST_RESULT_FILE)
+        assert not subject.input_dir.joinpath(
+            f"{subject._file_prefix}_{self.TEST_RESULT_FILE}.txt"
+        ).exists()
+
+    # ## Private Methods
     def test_average_set_with_defaults(self, subject):
         average = subject._average_set(
             subject._set_1_index, subject._set_1_count
