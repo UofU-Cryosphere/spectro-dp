@@ -4,22 +4,47 @@ from .measurement_composite import MeasurementComposite
 from .plotter import Plotter
 
 
-@click.command()
-@click.option('-in', '--input-dir', prompt=True, type=click.Path(exists=True))
-@click.option('-fp', '--file-prefix', prompt=True)
-@click.option(
-    '--up-looking-file-start', '-up', 'up_index', prompt=True, type=int
+@click.command(
+    help='Calculate snow albedo from a sequence of up and down looking '
+         'measurements'
 )
 @click.option(
-    '--up-looking-count', '-ulc', 'up_count', default=10, type=int
+    '-in', '--input-dir',
+    prompt=True, type=click.Path(exists=True),
+    help='Path to input directory containing both up and down looking '
+         'measurements',
 )
 @click.option(
-    '--down-looking-file-start', '-down', 'down_index', prompt=True, type=int
+    '-fp', '--file-prefix',
+    prompt=True,
+    help='Prefix of the filename for an individual measurement.'
 )
 @click.option(
-    '--down-looking-count', '-dlc', 'down_count', default=10, type=int
+    '--up-looking-file-start', '-up', 'up_index',
+    prompt=True, type=int,
+    help='Start index of the file containing the first up looking measurement.'
 )
-@click.option('--debug', is_flag=True, default=False)
+@click.option(
+    '--up-looking-count', '-ulc', 'up_count',
+    default=10, type=int,
+    help='Total count of up looking measurements. (Default: 10)'
+)
+@click.option(
+    '--down-looking-file-start', '-down', 'down_index',
+    prompt=True, type=int,
+    help='Start index of the file containing the first down looking '
+         'measurement.',
+)
+@click.option(
+    '--down-looking-count', '-dlc', 'down_count',
+    default=10, type=int,
+    help='Total count of up looking measurements. (Default: 10)'
+)
+@click.option(
+    '--debug',
+    is_flag=True, default=False,
+    help='Print information of processed files while processing',
+)
 def cli(
         input_dir, file_prefix,
         up_index, up_count,
