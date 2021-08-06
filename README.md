@@ -1,3 +1,5 @@
+![example workflow](https://github.com/UofU-Cryosphere/spectro-dp/actions/workflows/pytest_flake8.yml/badge.svg)
+
 # spectro-dp
 Spectrometer data processing library from field devices.
 
