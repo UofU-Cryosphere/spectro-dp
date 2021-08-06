@@ -131,7 +131,7 @@ class TestMeasurementComposite:
         outfile.unlink()
 
     def test_save_no_results(self, subject):
-        assert '' == MeasurementComposite('','').save(self.TEST_RESULT_FILE)
+        assert '' == MeasurementComposite('', '').save(self.TEST_RESULT_FILE)
         assert not subject.input_dir.joinpath(
             f"{subject._file_prefix}_{self.TEST_RESULT_FILE}.txt"
         ).exists()
@@ -160,7 +160,9 @@ class TestMeasurementComposite:
         measurements = np.ones(700, dtype=np.float32)
         measurements[651] = 2.0
 
-        measurements = MeasurementComposite._adjust_detector_split(measurements)
+        measurements = MeasurementComposite._adjust_detector_split(
+            measurements
+        )
 
         assert 50 == measurements[651:].sum()
         assert 0.5 * 650 == measurements[0:650].sum()

@@ -12,8 +12,8 @@ class MeasurementFile:
 
     HEADER_BYTES = 484
     BAND_COUNT = 2151
-    MIN_WAVELENGTH = 350 # in micro-meter
-    MAX_WAVELENGTH = 2500 # in micro-meter
+    MIN_WAVELENGTH = 350  # in micro-meter
+    MAX_WAVELENGTH = 2500  # in micro-meter
 
     def __init__(self, filepath) -> None:
         self._filepath = PurePath(filepath)
