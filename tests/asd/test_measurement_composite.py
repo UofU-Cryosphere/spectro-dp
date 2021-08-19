@@ -101,7 +101,7 @@ class TestMeasurementComposite:
             subject._adjust_detector_split(subject.set_1 / subject.set_2),
             subject.result
         )
-        assert subject.result[0] == pytest.approx(1.2915, abs=0.0001)
+        assert subject.result[0] == pytest.approx(1.3413, abs=0.0001)
 
     def test_calculate_sets_first(self, subject):
         subject.calculate()
@@ -156,7 +156,7 @@ class TestMeasurementComposite:
         with pytest.raises(FileNotFoundError):
             subject._average_set(99, 0)
 
-    def test_adjust_detector_split(self):
+    def test_adjust_detector_split_default_band(self):
         measurements = np.ones(700, dtype=np.float32)
         measurements[651] = 2.0
         ratio = measurements[651] / measurements[650]

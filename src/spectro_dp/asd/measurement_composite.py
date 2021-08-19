@@ -175,15 +175,17 @@ class MeasurementComposite:
             print(message)
 
     @staticmethod
-    def _adjust_detector_split(measurement) -> np.ndarray:
+    def _adjust_detector_split(measurement, band=650) -> np.ndarray:
         """
-        Fix the spike from the detector split. This uses band number 650 and
-        651 from the measurement and adjusts the bands from 0 to 650. It's a
-        known issue with the ASD spectrometer detectors.
+        Fix the spike from the detector split. This uses given band number and
+        the band following the given (band + 1) from the measurement parameter
+        and adjusts the bands from 0 to the given band.
+        Spikes are a known issue with the ASD spectrometer detectors.
 
-        :param measurement:
+        :param measurement: Array with uncorrected measurements
+        :param band: Band number to use for spike adjustment. (Default: 650)
         :return: Spike adjust measurement for the first 650 bands
         """
-        band_ratio = measurement[651] / measurement[650]
-        measurement[0:650] /= band_ratio
+        band_ratio = measurement[band + 1] / measurement[band]
+        measurement[0:band] *= band_ratio
         return measurement
