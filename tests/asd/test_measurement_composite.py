@@ -101,7 +101,7 @@ class TestMeasurementComposite:
             subject._adjust_detector_split(subject.set_1 / subject.set_2),
             subject.result
         )
-        assert  subject.result[0] == pytest.approx(1.2915, abs=0.0001)
+        assert subject.result[0] == pytest.approx(1.2915, abs=0.0001)
 
     def test_calculate_sets_first(self, subject):
         subject.calculate()
@@ -109,7 +109,7 @@ class TestMeasurementComposite:
             subject._average_set(subject._set_1_index, subject._set_1_count),
             subject.set_1
         )
-        assert  subject.set_1[0] == pytest.approx(692.0561, abs=0.0001)
+        assert subject.set_1[0] == pytest.approx(692.0561, abs=0.0001)
 
     def test_calculate_sets_second(self, subject):
         subject.calculate()
@@ -118,7 +118,7 @@ class TestMeasurementComposite:
             subject.set_2
         )
         print(subject.set_2)
-        assert  subject.set_2[0] == pytest.approx(525.8092, abs=0.0001)
+        assert subject.set_2[0] == pytest.approx(525.8092, abs=0.0001)
 
     def test_save(self, subject):
         subject.calculate()
