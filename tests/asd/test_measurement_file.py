@@ -16,28 +16,28 @@ def subject(test_data_path, data_file):
 
 class TestMeasurement(object):
     def test_header_constant(self):
-        assert 484 == MeasurementFile.HEADER_BYTES
+        assert MeasurementFile.HEADER_BYTES == 484
 
     def test_band_count(self):
-        assert 2151 == MeasurementFile.BAND_COUNT
+        assert MeasurementFile.BAND_COUNT == 2151
 
     def test_min_wavelength(self):
-        assert 350 == MeasurementFile.MIN_WAVELENGTH
+        assert MeasurementFile.MIN_WAVELENGTH == 350
 
     def test_max_wavelength(self):
-        assert 2500 == MeasurementFile.MAX_WAVELENGTH
+        assert MeasurementFile.MAX_WAVELENGTH == 2500
 
     def test_file_name(self, subject, data_file):
-        assert data_file == subject.file.name
+        assert subject.file.name == data_file
 
     def test_data(self, subject):
-        assert pytest.approx(688.93, 0.01) == subject.data[0]
+        assert subject.data[0] == pytest.approx(688.93, 0.01)
 
     def test_data_dtype(self, subject):
-        assert np.float32 == subject.data.dtype
+        assert subject.data.dtype == np.float32
 
     def test_bands_from_data(self, subject):
-        assert MeasurementFile.BAND_COUNT == subject.data.size
+        assert subject.data.size == MeasurementFile.BAND_COUNT
 
     def test_header(self, subject):
-        assert b'ASDAtwater' == subject.header[0:10]
+        assert subject.header[0:10] == b'ASDAtwater'

@@ -8,16 +8,25 @@ Spectrometer data processing library from field devices.
 
 ## Command Line Interfaces
 After the environment is set up and the library installed, it provides the
-following command line interfaces. 
+below listed command line interfaces. 
+
+A detailed help for each command is provided when giving the `--help` option.
+All programs will prompt for required parameters if not given with the call.
 
 ### `compute_albedo`
-Calculate the snow albedo from a sequence of measurements. A detailed help
-is provided when giving the `--help` option. The program will prompt for
-required parameters if not given with the call.
+Calculate the snow albedo from a sequence of measurements.
 
 ### Sample call
 ```shell
 compute_albedo -in /path/to/measurements/ -fp file_prefix -up 0 -down 10
+```
+
+### `compute_reflectance`
+Calculate the reflectance from surface and white reference measurements. 
+
+### Sample call
+```shell
+compute_reflectance -in /path/to/measurements/ -fp file_prefix -rs 0 -wrs 10
 ```
 
 ## Installation
