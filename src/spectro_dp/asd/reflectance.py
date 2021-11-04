@@ -5,7 +5,8 @@ from .plotter import Plotter
 
 
 @click.command(
-    help='Calculate reflectance from surface and white reference measurements.'
+    help='Calculate reflectance from surface and white reference measurements '
+         'with the ASD field spectrometer.'
 )
 @click.option(
     '-in', '--input-dir',

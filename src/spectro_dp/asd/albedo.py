@@ -6,7 +6,7 @@ from .plotter import Plotter
 
 @click.command(
     help='Calculate snow albedo from a sequence of up and down looking '
-         'measurements'
+         'measurements with the ASD field spectrometer.'
 )
 @click.option(
     '-in', '--input-dir',
