@@ -27,6 +27,17 @@ class TestMeasurement(object):
     def test_max_wavelength(self):
         assert MeasurementFile.MAX_WAVELENGTH == 2500
 
+    def test_band_range(self):
+        assert MeasurementFile.BAND_COUNT == MeasurementFile.BAND_RANGE.size
+
+    def test_band_range_min(self):
+        assert MeasurementFile.MIN_WAVELENGTH == \
+               MeasurementFile.BAND_RANGE[0]
+
+    def test_band_range_max(self):
+        assert MeasurementFile.MAX_WAVELENGTH == \
+               MeasurementFile.BAND_RANGE[-1]
+
     def test_file_name(self, subject, data_file):
         assert subject.file.name == data_file
 

@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 from .measurement_file import MeasurementFile
 
@@ -22,10 +21,7 @@ class Plotter:
         label_set_1 = kwargs.get('set_1_label', 'Set 1')
         label_set_2 = kwargs.get('set_2_label', 'Set 2')
 
-        x_ticks = np.arange(
-            MeasurementFile.MIN_WAVELENGTH,
-            MeasurementFile.MAX_WAVELENGTH + 1
-        )
+        x_ticks = MeasurementFile.BAND_RANGE
 
         ax1.set_title(Plotter.AX1_TITLE)
         ax1.plot(
