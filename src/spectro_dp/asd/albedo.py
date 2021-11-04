@@ -20,6 +20,11 @@ from .plotter import Plotter
     help='Prefix of the filename for an individual measurement.'
 )
 @click.option(
+    '-ofs', '--output-file-suffix',
+    default='albedo',
+    help='Suffix to use for the saved file. Default: albedo'
+)
+@click.option(
     '--up-looking-file-start', '-up', 'up_index',
     prompt=True, type=int,
     help='Start index of the file containing the first up looking measurement.'
@@ -46,7 +51,8 @@ from .plotter import Plotter
     help='Print information of processed files while processing',
 )
 def cli(
-        input_dir, file_prefix,
+        input_dir,
+        file_prefix, output_file_suffix,
         up_index, up_count,
         down_index, down_count,
         debug
@@ -59,7 +65,7 @@ def cli(
         )
         composite.calculate()
 
-        print(f"Results saved to:\n  {composite.save('albedo')}")
+        print(f"Results saved to:\n  {composite.save(output_file_suffix)}")
 
         if composite.set_2.mean() < composite.set_1.mean():
             set_1_label = 'Incoming'

@@ -20,6 +20,11 @@ from .plotter import Plotter
     help='Prefix of the filename for all measurements.'
 )
 @click.option(
+    '-ofs', '--output-file-suffix',
+    default='reflectance',
+    help='Suffix to use for the saved file. Default: reflectance'
+)
+@click.option(
     '--reflectance-start', '-rs', 'r_index',
     prompt=True, type=int,
     help='Start index of the file containing the surface measurement.'
@@ -46,7 +51,8 @@ from .plotter import Plotter
     help='Print information of processed files while processing',
 )
 def cli(
-        input_dir, file_prefix,
+        input_dir,
+        file_prefix, output_file_suffix,
         r_index, r_count,
         wr_index, wr_count,
         debug
@@ -59,7 +65,7 @@ def cli(
         )
         composite.calculate()
 
-        print(f"Results saved to:\n  {composite.save('reflectance')}")
+        print(f"Results saved to:\n  {composite.save(output_file_suffix)}")
 
         Plotter.show(
             composite,
