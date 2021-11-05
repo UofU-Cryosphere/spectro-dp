@@ -8,7 +8,6 @@ class Plotter:
     Base class to plot results of measurement composites
     """
 
-    X_LABEL = r"Wavelength $\mu m$"
     AX1_TITLE = "Measurements"
     AX2_TITLE = "Ratio Set 1/Set 2"
 
@@ -46,6 +45,6 @@ class Plotter:
 
         ax2.set_xlim(x_ticks.min() - 1, x_ticks.max() + 1)
         ax2.set_ylim(0, 1)
-        ax2.set_xlabel(Plotter.X_LABEL)
+        ax2.set_xlabel(MeasurementFile.X_LABEL)
 
         plt.show()

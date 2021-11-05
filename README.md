@@ -29,6 +29,14 @@ Calculate the reflectance from surface and white reference ASD measurements.
 asd_reflectatnce -in /path/to/measurements/ -fp file_prefix -rs 0 -wrs 10
 ```
 
+### `asd_white_reference`
+Utility to inspect a sequence of white reference measurements.
+
+### Sample call
+```shell
+asd_white_reference -in /path/to/measurements/ -fp file_prefix -wrs 10
+```
+
 ## Installation
 This library was developed with a `conda` environment,
 using the supplied [environment.yml](./environment.yml) and 
