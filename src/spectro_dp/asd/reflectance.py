@@ -46,6 +46,11 @@ from .plotter import Plotter
     help='Total count of white reference measurements. (Default: 10)'
 )
 @click.option(
+    '--skip-plot',
+    is_flag=True, default=False,
+    help="Don't show plot of the result",
+)
+@click.option(
     '--debug',
     is_flag=True, default=False,
     help='Print information of processed files while processing',
@@ -55,7 +60,7 @@ def cli(
         file_prefix, output_file_suffix,
         r_index, r_count,
         wr_index, wr_count,
-        debug
+        skip_plot, debug
 ):
     try:
         composite = MeasurementComposite(
@@ -67,12 +72,13 @@ def cli(
 
         print(f"Results saved to:\n  {composite.save(output_file_suffix)}")
 
-        Plotter.show(
-            composite,
-            composite_title='Reflectance',
-            set_1_label='Surface',
-            set_2_label='White reference'
-        )
+        if not skip_plot:
+            Plotter.show(
+                composite,
+                composite_title='Reflectance',
+                set_1_label='Surface',
+                set_2_label='White reference'
+            )
 
     except FileNotFoundError as fnfe:
         print(f"ERROR: {fnfe}")

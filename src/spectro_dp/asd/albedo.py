@@ -46,6 +46,11 @@ from .plotter import Plotter
     help='Total count of up looking measurements. (Default: 10)'
 )
 @click.option(
+    '--skip-plot',
+    is_flag=True, default=False,
+    help="Don't show plot of the result",
+)
+@click.option(
     '--debug',
     is_flag=True, default=False,
     help='Print information of processed files while processing',
@@ -55,7 +60,7 @@ def cli(
         file_prefix, output_file_suffix,
         up_index, up_count,
         down_index, down_count,
-        debug
+        skip_plot, debug
 ):
     try:
         composite = MeasurementComposite(
@@ -74,12 +79,13 @@ def cli(
             set_1_label = 'Outgoing'
             set_2_label = 'Incoming'
 
-        Plotter.show(
-            composite,
-            composite_title='Albedo',
-            set_1_label=set_1_label,
-            set_2_label=set_2_label
-        )
+        if not skip_plot:
+            Plotter.show(
+                composite,
+                composite_title='Albedo',
+                set_1_label=set_1_label,
+                set_2_label=set_2_label
+            )
 
     except FileNotFoundError as fnfe:
         print(f"ERROR: {fnfe}")
