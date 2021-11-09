@@ -8,26 +8,35 @@ program disort_albedo
   integer            :: IO_STATUS
 
   ! Maximum number of bands to simulate  
-  INTEGER :: BANDS=0
-  ! Effective size in micro-meter
-  INTEGER :: GRAINSIZE=148
+  INTEGER :: BANDS = 0
+  ! Effective radius in micro-meter
+  INTEGER :: GRAINSIZE = 148
+  ! Solar zenith angle
+  REAL :: ANGLE = 0.0
 
+  ! ANGLE conversion
+  REAL(kind=4),PARAMETER :: PI = 2.*ASIN(1.0)
+  REAL, PARAMETER :: Degree180 = 180.0
+  ! Degrees to radians
+  REAL            :: D_to_R    = PI/Degree180
+
+  ! File data inputs
   REAL, DIMENSION(:,:), ALLOCATABLE :: ASYMF
   REAL, DIMENSION(:,:), ALLOCATABLE :: SALB
+  ! Results
   REAL, DIMENSION(:,:), ALLOCATABLE :: ALBS
-
-  REAL(kind=4),PARAMETER :: PI = 2.*ASIN(1.0)
 
   INTEGER :: IU, I, J
   CHARACTER  HEADER*127
       
   ! Command line options
-  type(option_s):: opts(2)
+  type(option_s):: opts(3)
   opts(1) = option_s( "asymmetry",  .TRUE.,  'a' )
   opts(2) = option_s( "ssa",  .TRUE., 's')
+  opts(3) = option_s( "solar-zenith",  .TRUE., 'z')
 
-  if (command_argument_count() .NE. 4 ) then
-    WRITE (*, *) "Required Options: --asymmetry path_to_file -ssa path_to_file"
+  if (command_argument_count() .NE. 6 ) then
+    WRITE (*, *) "Required Options: --asymmetry path_to_file -ssa path_to_file --solar-zenith degrees"
     CALL EXIT(-1)
   end if
 
@@ -40,6 +49,10 @@ program disort_albedo
         ASYM_FILE = optarg
       case( 's' )
         SSA_FILE = optarg
+      case( 'z' )
+        READ(optarg, '(f10.0)') ANGLE
+        ANGLE = COS((ANGLE * D_to_R))
+        print *, ANGLE
       case( 'h' )
     end select
   end do
@@ -48,7 +61,6 @@ program disort_albedo
   OPEN(10, file=ASYM_FILE, iostat=IO_STATUS, status='old')
   if (IO_STATUS/=0) STOP 'Cannot open assymetry file'
 
-  BANDS = 0
   do
     READ(10, *, iostat=IO_STATUS)
     if (IO_STATUS/=0) EXIT
@@ -107,7 +119,8 @@ program disort_albedo
       PRNT( 4 )  = .FALSE.
       PRNT( 2 )  = .FALSE.
       PRNT( 1 )  = .FALSE.
-      UMU( 1 )   =  0.9205       
+      ! Solar zenith angle
+      UMU( 1 )   =  ANGLE
 
       DO IU = 1, NUMU_O
         UMU( IU + NUMU_O ) = UMU( IU )
