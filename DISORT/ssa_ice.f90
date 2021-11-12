@@ -1,3 +1,8 @@
+subroutine print_help
+  WRITE (*, *) "Required Options: --asymmetry path_to_file --ssa path_to_file --solar-zenith angle_in_degrees"
+  CALL EXIT(-1)
+end subroutine print_help
+
 program disort_albedo
   use f90getopt
   use disort_variables
@@ -30,15 +35,13 @@ program disort_albedo
   CHARACTER  HEADER*127
       
   ! Command line options
-  type(option_s):: opts(3)
+  type(option_s):: opts(4)
   opts(1) = option_s( "asymmetry",  .TRUE.,  'a' )
   opts(2) = option_s( "ssa",  .TRUE., 's')
   opts(3) = option_s( "solar-zenith",  .TRUE., 'z')
+  opts(4) = option_s( "help", .false.,  'h')
 
-  if (command_argument_count() /= 6 ) then
-    WRITE (*, *) "Required Options: --asymmetry path_to_file -ssa path_to_file --solar-zenith degrees"
-    CALL EXIT(-1)
-  end if
+  if (command_argument_count() /= 6 ) call print_help
 
   ! Process command line options one by one
   DO
@@ -54,6 +57,7 @@ program disort_albedo
         ANGLE = COS(ANGLE * D_to_R)
         print *, ANGLE
       CASE( 'h' )
+        call print_help
     END SELECT
   END DO
 
