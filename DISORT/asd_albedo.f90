@@ -5,7 +5,7 @@ program disort_albedo
 
   ! CLI values
   CHARACTER(len=100) :: ASYM_FILE, SSA_FILE
-  integer            :: IO_STATUS
+  INTEGER            :: IO_STATUS
 
   ! Maximum number of bands to simulate  
   INTEGER :: BANDS = 0
@@ -35,37 +35,37 @@ program disort_albedo
   opts(2) = option_s( "ssa",  .TRUE., 's')
   opts(3) = option_s( "solar-zenith",  .TRUE., 'z')
 
-  if (command_argument_count() .NE. 6 ) then
+  if (command_argument_count() /= 6 ) then
     WRITE (*, *) "Required Options: --asymmetry path_to_file -ssa path_to_file --solar-zenith degrees"
     CALL EXIT(-1)
   end if
 
   ! Process command line options one by one
-  do
-    select case( getopt( "ash:", opts ) )
-      case( char(0) )
-        exit
-      case( 'a' )
+  DO
+    SELECT CASE( getopt( "ash:", opts ) )
+      CASE( char(0) )
+        EXIT
+      CASE( 'a' )
         ASYM_FILE = optarg
-      case( 's' )
+      CASE( 's' )
         SSA_FILE = optarg
-      case( 'z' )
+      CASE( 'z' )
         READ(optarg, '(f10.0)') ANGLE
-        ANGLE = COS((ANGLE * D_to_R))
+        ANGLE = COS(ANGLE * D_to_R)
         print *, ANGLE
-      case( 'h' )
-    end select
-  end do
+      CASE( 'h' )
+    END SELECT
+  END DO
 
   ! Get number of lines, equal to bands, from ASYM_FILE
   OPEN(10, file=ASYM_FILE, iostat=IO_STATUS, status='old')
-  if (IO_STATUS/=0) STOP 'Cannot open assymetry file'
+  IF (IO_STATUS/=0) STOP 'Cannot open assymetry file'
 
-  do
+  DO
     READ(10, *, iostat=IO_STATUS)
-    if (IO_STATUS/=0) EXIT
+    IF (IO_STATUS/=0) EXIT
     BANDS = BANDS + 1
-  end do
+  END DO
   CLOSE(10)
 
   allocate(ASYMF(GRAINSIZE, BANDS))
@@ -77,7 +77,7 @@ program disort_albedo
   CLOSE(8)
 
   OPEN(unit=10,file=SSA_FILE, iostat=IO_STATUS, status='old')
-  if (IO_STATUS/=0) STOP 'Cannot open ssa file'
+  IF (IO_STATUS/=0) STOP 'Cannot open ssa file'
   READ(10,*) SALB
   CLOSE(10)
 
@@ -92,7 +92,7 @@ program disort_albedo
       DO_PSEUDO_SPHERE = .FALSE.
       DELTAMPLUS = .FALSE.
 
-      NSTR = 16; IF(MOD(NSTR,2).NE.0) NSTR = NSTR+1;
+      NSTR = 16; IF(MOD(NSTR,2) /= 0) NSTR = NSTR+1;
       NLYR = 1; 
       NMOM = NSTR 
       NTAU = 4; IF(.NOT.USRTAU) NTAU = NLYR + 1
@@ -106,7 +106,7 @@ program disort_albedo
       USRANG = .TRUE.      
       NUMU   = 1; IF(.NOT.USRANG) NUMU = NSTR  
   
-      IF( USRANG .AND. IBCND.EQ.1 ) THEN
+      IF( USRANG .AND. IBCND == 1 ) THEN
         NUMU_O = NUMU
         NUMU = 2*NUMU
       END IF    
