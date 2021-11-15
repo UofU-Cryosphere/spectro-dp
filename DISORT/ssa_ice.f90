@@ -96,19 +96,21 @@ program disort_albedo
       DO_PSEUDO_SPHERE = .FALSE.
       DELTAMPLUS = .FALSE.
 
-      NSTR = 16; IF(MOD(NSTR,2) /= 0) NSTR = NSTR+1;
-      NLYR = 1; 
+      NSTR = 16
+      IF( MOD(NSTR,2) /= 0 ) NSTR = NSTR + 1
+      NLYR = 1
       NMOM = NSTR 
-      NTAU = 4; IF(.NOT.USRTAU) NTAU = NLYR + 1
+      NTAU = 4
+      IF( .NOT. USRTAU ) NTAU = NLYR + 1
       !NUMU      = 1; IF(.NOT.USRANG) NUMU = NSTR
-      NPHI = 1; 
-
+      NPHI = 1
 
       IBCND  = 1
-      NLYR   = 1; 
+      NLYR   = 1
       ONLYFL = .FALSE.
       USRANG = .TRUE.      
-      NUMU   = 1; IF(.NOT.USRANG) NUMU = NSTR  
+      NUMU   = 1
+      IF( .NOT. USRANG ) NUMU = NSTR
   
       IF( USRANG .AND. IBCND == 1 ) THEN
         NUMU_O = NUMU
