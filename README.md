@@ -21,7 +21,7 @@ Calculate the snow albedo from a sequence of ASD measurements.
 asd_albedo -in /path/to/measurements/ -fp file_prefix -up 0 -down 10
 ```
 
-### `asd_reflectatnce`
+### `asd_reflectance`
 Calculate the reflectance from surface and white reference ASD measurements. 
 
 ### Sample call
