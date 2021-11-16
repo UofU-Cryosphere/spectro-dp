@@ -13,20 +13,28 @@ below listed command line interfaces.
 A detailed help for each command is provided when giving the `--help` option.
 All programs will prompt for required parameters if not given with the call.
 
-### `compute_albedo`
-Calculate the snow albedo from a sequence of measurements.
+### `asd_albedo`
+Calculate the snow albedo from a sequence of ASD measurements.
 
 ### Sample call
 ```shell
-compute_albedo -in /path/to/measurements/ -fp file_prefix -up 0 -down 10
+asd_albedo -in /path/to/measurements/ -fp file_prefix -up 0 -down 10
 ```
 
-### `compute_reflectance`
-Calculate the reflectance from surface and white reference measurements. 
+### `asd_reflectance`
+Calculate the reflectance from surface and white reference ASD measurements. 
 
 ### Sample call
 ```shell
-compute_reflectance -in /path/to/measurements/ -fp file_prefix -rs 0 -wrs 10
+asd_reflectatnce -in /path/to/measurements/ -fp file_prefix -rs 0 -wrs 10
+```
+
+### `asd_white_reference`
+Utility to inspect a sequence of white reference measurements.
+
+### Sample call
+```shell
+asd_white_reference -in /path/to/measurements/ -fp file_prefix -wrs 10
 ```
 
 ## Installation

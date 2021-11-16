@@ -12,8 +12,13 @@ class MeasurementFile:
 
     HEADER_BYTES = 484
     BAND_COUNT = 2151
+
     MIN_WAVELENGTH = 350  # in micro-meter
     MAX_WAVELENGTH = 2500  # in micro-meter
+    BAND_RANGE = np.arange(MIN_WAVELENGTH, MAX_WAVELENGTH + 1)
+
+    X_LABEL = r'Wavelength $\mu m$'
+    Y_LABEL = 'DN'
 
     def __init__(self, filepath) -> None:
         self._filepath = PurePath(filepath)

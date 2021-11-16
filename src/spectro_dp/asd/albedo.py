@@ -6,7 +6,7 @@ from .plotter import Plotter
 
 @click.command(
     help='Calculate snow albedo from a sequence of up and down looking '
-         'measurements'
+         'measurements with the ASD field spectrometer.'
 )
 @click.option(
     '-in', '--input-dir',
@@ -18,6 +18,11 @@ from .plotter import Plotter
     '-fp', '--file-prefix',
     prompt=True,
     help='Prefix of the filename for an individual measurement.'
+)
+@click.option(
+    '-ofs', '--output-file-suffix',
+    default='albedo',
+    help='Suffix to use for the saved file. Default: albedo'
 )
 @click.option(
     '--up-looking-file-start', '-up', 'up_index',
@@ -41,15 +46,21 @@ from .plotter import Plotter
     help='Total count of up looking measurements. (Default: 10)'
 )
 @click.option(
+    '--skip-plot',
+    is_flag=True, default=False,
+    help="Don't show plot of the result",
+)
+@click.option(
     '--debug',
     is_flag=True, default=False,
     help='Print information of processed files while processing',
 )
 def cli(
-        input_dir, file_prefix,
+        input_dir,
+        file_prefix, output_file_suffix,
         up_index, up_count,
         down_index, down_count,
-        debug
+        skip_plot, debug
 ):
     try:
         composite = MeasurementComposite(
@@ -59,7 +70,7 @@ def cli(
         )
         composite.calculate()
 
-        print(f"Results saved to:\n  {composite.save('albedo')}")
+        print(f"Results saved to:\n  {composite.save(output_file_suffix)}")
 
         if composite.set_2.mean() < composite.set_1.mean():
             set_1_label = 'Incoming'
@@ -68,12 +79,13 @@ def cli(
             set_1_label = 'Outgoing'
             set_2_label = 'Incoming'
 
-        Plotter.show(
-            composite,
-            composite_title='Albedo',
-            set_1_label=set_1_label,
-            set_2_label=set_2_label
-        )
+        if not skip_plot:
+            Plotter.show(
+                composite,
+                composite_title='Albedo',
+                set_1_label=set_1_label,
+                set_2_label=set_2_label
+            )
 
     except FileNotFoundError as fnfe:
         print(f"ERROR: {fnfe}")
