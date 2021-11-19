@@ -73,7 +73,7 @@ def cli(
         print(f"Results saved to:\n  {composite.save(output_file_suffix)}")
 
         if not skip_plot:
-            Plotter.show(
+            Plotter.show_composite(
                 composite,
                 composite_title='Reflectance',
                 set_1_label='Surface',
