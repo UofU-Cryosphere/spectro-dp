@@ -130,3 +130,8 @@ dmypy.json
 
 # Temporary test results
 tests/data/*_pytest.txt
+
+# DISORT model
+DISORT/disort_model.f
+DISORT/*.mod
+DISORT/ssa_ice
