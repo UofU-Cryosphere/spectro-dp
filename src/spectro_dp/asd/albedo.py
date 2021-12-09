@@ -80,7 +80,7 @@ def cli(
             set_2_label = 'Incoming'
 
         if not skip_plot:
-            Plotter.show(
+            Plotter.show_composite(
                 composite,
                 composite_title='Albedo',
                 set_1_label=set_1_label,

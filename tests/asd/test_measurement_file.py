@@ -50,5 +50,8 @@ class TestMeasurement(object):
     def test_bands_from_data(self, subject):
         assert subject.data.size == MeasurementFile.BAND_COUNT
 
+    def test_header_return_type(self, subject):
+        assert type(subject.header) == str
+
     def test_header(self, subject):
-        assert subject.header[0:10] == b'ASDAtwater'
+        assert subject.header == 'ASDAtwater test'

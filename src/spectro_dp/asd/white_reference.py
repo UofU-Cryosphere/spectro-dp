@@ -1,9 +1,9 @@
 from pathlib import PurePath
 
 import click
-import matplotlib.pyplot as plt
 
 from .measurement_composite import MeasurementFile
+from .plotter import Plotter
 
 
 @click.command(
@@ -48,25 +48,21 @@ def cli(
         if debug:
             print("Processing:")
 
-        plt.figure(dpi=300)
-        for file_index in range(wr_index, wr_index + wr_count):
-            file = input_dir.joinpath(file_base.format(file_index=file_index))
+        with Plotter.show(title='White References') as plt:
+            for file_index in range(wr_index, wr_index + wr_count):
+                file = input_dir.joinpath(
+                    file_base.format(file_index=file_index)
+                )
 
-            if debug:
-                print(f' - {file.as_posix()}')
+                if debug:
+                    print(f' - {file.as_posix()}')
 
-            plt.plot(
-                MeasurementFile.BAND_RANGE, MeasurementFile(file).data,
-                label=file_suffix.format(file_index=file_index), lw=1
-            )
+                plt.plot(
+                    MeasurementFile.BAND_RANGE, MeasurementFile(file).data,
+                    label=file_suffix.format(file_index=file_index), lw=1
+                )
 
-        plt.xlabel(MeasurementFile.X_LABEL)
-        plt.xlim(left=MeasurementFile.MIN_WAVELENGTH)
-        plt.ylabel(MeasurementFile.Y_LABEL)
-        plt.ylim(bottom=0)
-        plt.title('White References: 210410r')
-        plt.legend()
-        plt.show()
+            plt.legend()
 
     except FileNotFoundError as fnfe:
         print(f"ERROR: {fnfe}")

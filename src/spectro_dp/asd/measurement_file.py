@@ -11,6 +11,9 @@ class MeasurementFile:
     """
 
     HEADER_BYTES = 484
+    HEADER_DECODE = 'ISO-8859-1'
+    NULL_BYTE = '\x00'
+
     BAND_COUNT = 2151
 
     MIN_WAVELENGTH = 350  # in micro-meter
@@ -50,7 +53,7 @@ class MeasurementFile:
 
         return self._data
 
-    def _read_header(self) -> bytes:
+    def _read_header(self) -> str:
         with open(self.file, 'rb') as infile:
             header = infile.read(self.HEADER_BYTES)
-        return header
+        return header.decode(self.HEADER_DECODE).split(self.NULL_BYTE, 1)[0]
