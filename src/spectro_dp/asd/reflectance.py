@@ -35,6 +35,12 @@ from .plotter import Plotter
     help='Total count of surface measurements. (Default: 1)'
 )
 @click.option(
+    '--white-reference-prefix', '-wrp', 'wrp',
+    default='',
+    help='Prefix to find white reference files. '
+         'Default is blank; Example: white-reference/',
+)
+@click.option(
     '--white-reference-start', '-wrs', 'wr_index',
     prompt=True, type=int,
     help='Start index of the file containing the first white reference '
@@ -59,13 +65,14 @@ def cli(
         input_dir,
         file_prefix, output_file_suffix,
         r_index, r_count,
-        wr_index, wr_count,
+        wrp, wr_index, wr_count,
         skip_plot, debug
 ):
     try:
         composite = MeasurementComposite(
-            input_dir, file_prefix, r_index, wr_index,
-            set_1_count=r_count, set_2_count=wr_count,
+            input_dir, file_prefix,
+            set_1_index=r_index, set_1_count=r_count,
+            set_2_index=wr_index, set_2_count=wr_count, set_2_prefix=wrp,
             debug=debug
         )
         composite.calculate()
