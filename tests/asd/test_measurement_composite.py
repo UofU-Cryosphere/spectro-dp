@@ -18,6 +18,7 @@ def subject(test_data_path, file_prefix):
 
 class TestMeasurementComposite:
     TEST_RESULT_FILE = 'pytest'
+    SET_2_PREFIX = 'white-reference/'
 
     # Constants
     def test_first_set_index(self):
@@ -79,6 +80,13 @@ class TestMeasurementComposite:
         subject = MeasurementComposite('', '', debug=True)
         assert subject._debug
 
+    def test_set_2_prefix_default(self, subject):
+        assert subject._set_2_prefix == ''
+
+    def test_set_2_prefix(self, subject):
+        subject = MeasurementComposite('', '', set_2_prefix=self.SET_2_PREFIX)
+        assert subject._set_2_prefix == self.SET_2_PREFIX
+
     # Properties
     def test_input_dir_property(self, subject):
         assert isinstance(subject.input_dir, Path)
@@ -128,20 +136,40 @@ class TestMeasurementComposite:
         ).exists()
 
     # ## Private Methods
+    def test_file_glob_file_found(self, subject):
+        files = subject._file_glob(0)
+
+        assert len(sorted(files)) == 1
+
+    def test_file_glob_file_found_set_2(self, subject):
+        files = sorted(subject._file_glob(0, True))
+
+        assert len(files) == 1
+        assert subject._set_2_prefix[:-1] in files[0].parent.name
+
+    def test_file_glob_no_file_found(self, subject):
+        files = subject._file_glob(3)
+
+        assert len(sorted(files)) == 0
+
     def test_average_set_with_defaults(self, subject):
         average = subject._average_set(
             subject._set_1_index, subject._set_1_count
         )
         assert average[0] == pytest.approx(692.0561, abs=0.0001)
 
-    def test_average_set_with_custom_counts(self, test_data_path, file_prefix):
-        subject = MeasurementComposite(
-            test_data_path, file_prefix, set_1_count=1
-        )
-        average = subject._average_set(
-            subject._set_1_index, subject._set_1_count
-        )
+    def test_average_set_with_custom_counts(self, subject):
+        average = subject._average_set(0, 1)
         assert average[0] == pytest.approx(688.9380, abs=0.0001)
+
+    # The white-reference folder under the test data uses a symlink to the
+    # first file. Hence, this test should have the same result as the above.
+    def test_average_set_with_set_2_prefix(self, subject):
+        subject._set_2_prefix = self.SET_2_PREFIX
+        average = subject._average_set(0, 1, True)
+        assert average[0] == pytest.approx(688.9380, abs=0.0001)
+
+        subject._set_2_prefix = ''
 
     def test_average_set_raise_error(self, subject):
         with pytest.raises(FileNotFoundError):

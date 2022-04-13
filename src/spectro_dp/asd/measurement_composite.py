@@ -38,6 +38,7 @@ class MeasurementComposite:
         :param set_2_index: File number of the second set of measurements
                             (Default: 10)
         :param kwargs: Optional - Possible options
+            set_2_prefix: Path to set 2 files if different from set 1 files
             set_1_count: Number of first set measurements (Default: 10)
             set_2_count: Number of second set measurements (Default: 10)
             debug: Print processing progress
@@ -48,6 +49,7 @@ class MeasurementComposite:
         self._set_1_count = kwargs.get('set_1_count', self.SET_COUNT)
         self._set_2_index = set_2_index
         self._set_2_count = kwargs.get('set_2_count', self.SET_COUNT)
+        self._set_2_prefix = kwargs.get('set_2_prefix', '')
 
         self._debug = kwargs.get('debug', False)
 
@@ -126,7 +128,9 @@ class MeasurementComposite:
         self._print_progress("Processing set-1:\n  Averaging files:")
         self._set_1 = self._average_set(self._set_1_index, self._set_1_count)
         self._print_progress("Processing set-2:\n  Averaging files:")
-        self._set_2 = self._average_set(self._set_2_index, self._set_2_count)
+        self._set_2 = self._average_set(
+            self._set_2_index, self._set_2_count, True
+        )
 
         self._print_progress("Calculating: set-1 / set-2")
 
@@ -136,26 +140,33 @@ class MeasurementComposite:
         self._result = self._adjust_detector_split(self._set_2)
         self._result = (self._set_1 / self._set_2)
 
-    def _file_glob(self, file_index) -> Iterable[Path]:
+    def _file_glob(self, file_index, set_2=False) -> Iterable[Path]:
+        if set_2 and len(self._set_2_prefix) > 0:
+            file_prefix = self._set_2_prefix + self._file_prefix
+        else:
+            file_prefix = self._file_prefix
+
         file_glob = self.FILE_GLOB.format(
-            file_prefix=self._file_prefix,
+            file_prefix=file_prefix,
             file_number=file_index
         )
         return self.input_dir.glob(file_glob)
 
-    def _average_set(self, start_index, file_count) -> np.ndarray:
+    def _average_set(self, start_index, file_count, set_2=False) -> np.ndarray:
         """
         Average set of measurements read from a sequence of data files
 
         :param start_index: File index to start reading from
         :param file_count: Number of files to average from the start index
+        :param set_2: Boolean indicator for first or second set. Triggers
+                      a potential different handling for the file name.
         :return: Array with averages for each band
         """
         measurements = np.zeros(MeasurementFile.BAND_COUNT, dtype=np.float32)
         read_count = 0
 
         for file_number in range(start_index, start_index + file_count):
-            for file in self._file_glob(file_number):
+            for file in self._file_glob(file_number, set_2):
                 self._print_progress(f"  - {file.as_posix()}")
                 measurements += MeasurementFile(file).data
                 read_count += 1
