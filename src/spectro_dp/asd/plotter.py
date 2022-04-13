@@ -39,6 +39,7 @@ class Plotter:
             kwargs.get('title', Plotter.TITLE)
         )
 
+        plt.tight_layout()
         plt.show()
 
     @staticmethod
@@ -73,7 +74,14 @@ class Plotter:
             label=label_set_2, c='skyblue', **Plotter.LINE_OPTS
         )
         ax1.set_ylim(bottom=0)
-        ax1.legend()
+        ax1.legend(
+            bbox_to_anchor=(0., 1.0, 1., .1),
+            loc='lower left',
+            ncol=2,
+            mode="expand",
+            borderaxespad=0.,
+            framealpha=0,
+        )
 
         ax2.plot(
             x_ticks, measurement_composite.result,
@@ -87,4 +95,5 @@ class Plotter:
         ax2.set_ylim(0, 1)
         ax2.set_xlabel(MeasurementFile.X_LABEL)
 
+        plt.tight_layout()
         plt.show()
