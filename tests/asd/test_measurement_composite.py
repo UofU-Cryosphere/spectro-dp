@@ -105,20 +105,11 @@ class TestMeasurementComposite:
 
     def test_calculate_sets_first(self, subject):
         subject.calculate()
-        assert np.array_equal(
-            subject._average_set(subject._set_1_index, subject._set_1_count),
-            subject.set_1
-        )
-        assert subject.set_1[0] == pytest.approx(692.0561, abs=0.0001)
+        assert subject.set_1[0] == pytest.approx(13268.171, abs=0.001)
 
     def test_calculate_sets_second(self, subject):
         subject.calculate()
-        assert np.array_equal(
-            subject._average_set(subject._set_2_index, subject._set_2_count),
-            subject.set_2
-        )
-        print(subject.set_2)
-        assert subject.set_2[0] == pytest.approx(525.8092, abs=0.0001)
+        assert subject.set_2[0] == pytest.approx(9891.909, abs=0.001)
 
     def test_save(self, subject):
         subject.calculate()
@@ -158,12 +149,10 @@ class TestMeasurementComposite:
 
     def test_adjust_detector_split_default_band(self):
         measurements = np.ones(700, dtype=np.float32)
-        measurements[651] = 2.0
-        ratio = measurements[651] / measurements[650]
+        measurements[651:] = 1.5
 
         measurements = MeasurementComposite._adjust_detector_split(
             measurements
         )
 
-        assert measurements[651:].sum() == 50
-        assert measurements[0:650].sum() == ratio * 650
+        assert measurements.mean() == 1.5

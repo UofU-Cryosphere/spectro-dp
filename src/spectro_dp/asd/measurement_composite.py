@@ -129,7 +129,12 @@ class MeasurementComposite:
         self._set_2 = self._average_set(self._set_2_index, self._set_2_count)
 
         self._print_progress("Calculating: set-1 / set-2")
-        self._result = self._adjust_detector_split(self._set_1 / self._set_2)
+
+        # Fix the spike for each set to also reflect this when using the
+        # sets individually in plots
+        self._result = self._adjust_detector_split(self._set_1)
+        self._result = self._adjust_detector_split(self._set_2)
+        self._result = (self._set_1 / self._set_2)
 
     def _file_glob(self, file_index) -> Iterable[Path]:
         file_glob = self.FILE_GLOB.format(
@@ -187,5 +192,5 @@ class MeasurementComposite:
         :return: Spike adjust measurement for the first 650 bands
         """
         band_ratio = measurement[band + 1] / measurement[band]
-        measurement[0:band] *= band_ratio
+        measurement[0:band + 1] *= band_ratio
         return measurement
