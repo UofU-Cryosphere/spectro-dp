@@ -62,7 +62,10 @@ def cli(
                     label=file_suffix.format(file_index=file_index), lw=1
                 )
 
-            plt.legend()
+            plt.legend(
+                loc='upper right',
+                bbox_to_anchor=(1.2, 1)
+            )
 
     except FileNotFoundError as fnfe:
         print(f"ERROR: {fnfe}")
