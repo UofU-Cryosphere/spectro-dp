@@ -64,7 +64,8 @@ def cli(
 ):
     try:
         composite = MeasurementComposite(
-            input_dir, file_prefix, down_index, up_index,
+            input_dir, file_prefix,
+            set_1_index=down_index, set_2_index=up_index,
             set_1_count=down_count, set_2_count=up_count,
             debug=debug
         )
@@ -72,12 +73,8 @@ def cli(
 
         print(f"Results saved to:\n  {composite.save(output_file_suffix)}")
 
-        if composite.set_2.mean() < composite.set_1.mean():
-            set_1_label = 'Incoming'
-            set_2_label = 'Outgoing'
-        else:
-            set_1_label = 'Outgoing'
-            set_2_label = 'Incoming'
+        set_1_label = 'Down Measurements'
+        set_2_label = 'Up Measurements'
 
         if not skip_plot:
             Plotter.show_composite(
